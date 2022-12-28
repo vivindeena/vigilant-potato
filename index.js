@@ -2,15 +2,17 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 
+const books = require('./routes/books')
+
 const app = express()
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const PORT = process.env.PORT || 3000
 
 mongoose
-  .connect(process.env.MONGODB_DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(process.env.MONGODB_DB_URI)
   .then(() => {
     console.log('MongoDb Connected ......')
   })
@@ -18,9 +20,8 @@ mongoose
     console.log('Error:', err)
   })
 
-// app.use()
+app.use('/books',books)
 
-PORT 
 app.listen(PORT,()=>{
     console.log(`Server Started on port ${PORT}`);
 })
